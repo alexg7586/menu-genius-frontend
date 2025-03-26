@@ -10,16 +10,7 @@ export default function Home() {
 
   const languageOptions = [
     { label: "English", value: "English" },
-    { label: "Español", value: "Spanish" },
-    { label: "Français", value: "French" },
-    { label: "Deutsch", value: "German" },
-    { label: "العربية", value: "Arabic" },
     { label: "简体中文", value: "Simplified Chinese" },
-    { label: "繁體中文", value: "Traditional Chinese" },
-    { label: "日本語", value: "Japanese" },
-    { label: "한국어", value: "Korean" },
-    { label: "ภาษาไทย", value: "Thai" },
-    { label: "Tiếng Việt", value: "Vietnamese" },
   ];
 
   const uiTextMap = {
@@ -32,38 +23,6 @@ export default function Home() {
       loading: "Analyzing menu image...",
       uploadError: "Upload failed. Please try again.",
     },
-    Spanish: {
-      preview: "🖼️ Vista previa",
-      upload: "Elegir y subir imagen",
-      tryAnother: "🔁 Probar otra imagen",
-      clear: "❌ Borrar",
-      loading: "Analizando imagen del menú...",
-      uploadError: "Fallo de carga. Inténtalo de nuevo.",
-    },
-    French: {
-      preview: "🖼️ Aperçu",
-      upload: "Choisir et télécharger l'image",
-      tryAnother: "🔁 Choisir une autre image",
-      clear: "❌ Effacer",
-      loading: "Analyse de l'image du menu...",
-      uploadError: "Échec du téléchargement. Réessayez.",
-    },
-    German: {
-      preview: "🖼️ Vorschau",
-      upload: "Bild auswählen und hochladen",
-      tryAnother: "🔁 Anderes Bild versuchen",
-      clear: "❌ Löschen",
-      loading: "Menübild wird analysiert...",
-      uploadError: "Upload fehlgeschlagen. Bitte versuche es erneut.",
-    },
-    Arabic: {
-      preview: "🖼️ المعاينة",
-      upload: "اختر صورة وقم بتحميلها",
-      tryAnother: "🔁 جرب صورة أخرى",
-      clear: "❌ مسح",
-      loading: "جارٍ تحليل صورة القائمة...",
-      uploadError: "فشل التحميل. حاول مرة أخرى.",
-    },
     "Simplified Chinese": {
       preview: "🖼️ 图片预览",
       upload: "选择并上传图片",
@@ -72,60 +31,11 @@ export default function Home() {
       loading: "正在分析菜单图片...",
       uploadError: "上传失败，请重试。",
     },
-    "Traditional Chinese": {
-      preview: "🖼️ 圖片預覽",
-      upload: "選擇並上傳圖片",
-      tryAnother: "🔁 重新上傳",
-      clear: "❌ 清除",
-      loading: "正在分析菜單圖片...",
-      uploadError: "上傳失敗，請重試。",
-    },
-    Japanese: {
-      preview: "🖼️ プレビュー",
-      upload: "画像を選択してアップロード",
-      tryAnother: "🔁 別の画像を試す",
-      clear: "❌ クリア",
-      loading: "メニュー画像を解析中...",
-      uploadError: "アップロードに失敗しました。もう一度お試しください。",
-    },
-    Korean: {
-      preview: "🖼️ 미리보기",
-      upload: "이미지 선택 및 업로드",
-      tryAnother: "🔁 다른 이미지 시도",
-      clear: "❌ 지우기",
-      loading: "메뉴 이미지를 분석 중...",
-      uploadError: "업로드 실패. 다시 시도해주세요.",
-    },
-    Thai: {
-      preview: "🖼️ ดูตัวอย่าง",
-      upload: "เลือกและอัปโหลดรูปภาพ",
-      tryAnother: "🔁 ลองรูปอื่น",
-      clear: "❌ ล้าง",
-      loading: "กำลังวิเคราะห์รูปเมนู...",
-      uploadError: "การอัปโหลดล้มเหลว โปรดลองอีกครั้ง.",
-    },
-    Vietnamese: {
-      preview: "🖼️ Xem trước",
-      upload: "Chọn và tải lên hình ảnh",
-      tryAnother: "🔁 Tải hình khác",
-      clear: "❌ Xóa",
-      loading: "Đang phân tích hình ảnh menu...",
-      uploadError: "Tải lên thất bại. Vui lòng thử lại.",
-    },
   };
 
   const titleMap = {
     English: "🍽️ Menu Description",
-    Spanish: "🍽️ Descripción del Menú",
-    French: "🍽️ Description du Menu",
-    German: "🍽️ Menübeschreibung",
-    Arabic: "🍽️ وصف القائمة",
     "Simplified Chinese": "🍽️ 菜单介绍",
-    "Traditional Chinese": "🍽️ 菜單介紹",
-    Japanese: "🍽️ メニューの説明",
-    Korean: "🍽️ 메뉴 설명",
-    Thai: "🍽️ รายละเอียดเมนู",
-    Vietnamese: "🍽️ Mô tả Thực đơn",
   };
 
   const resetState = () => {
