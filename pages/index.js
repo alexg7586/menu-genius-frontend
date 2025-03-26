@@ -13,29 +13,27 @@ export default function Home() {
     { label: "简体中文", value: "Simplified Chinese" },
   ];
 
-  const uiTextMap = {
-    English: {
-      preview: "🖼️ Preview",
-      upload: "Choose and Upload Image",
-      tryAnother: "🔁 Try Another Image",
-      clear: "❌ Clear",
-      loading: "Analyzing menu image...",
-      uploadError: "Upload failed. Please try again.",
-    },
-    "Simplified Chinese": {
-      preview: "🖼️ 图片预览",
-      upload: "选择并上传图片",
-      tryAnother: "🔁 重新上传",
-      clear: "❌ 清空",
-      loading: "正在分析菜单图片...",
-      uploadError: "上传失败，请重试。",
-    },
-  };
-
-  const titleMap = {
-    English: "🍽️ Menu Description",
-    "Simplified Chinese": "🍽️ 菜单介绍",
-  };
+  
+const languageTextMap = {
+  English: {
+    preview: "🖼️ Preview",
+    upload: "Choose and Upload Image",
+    tryAnother: "🔁 Try Another Image",
+    clear: "❌ Clear",
+    loading: "Analyzing menu image...",
+    uploadError: "Upload failed. Please try again.",
+    title: "🍽️ Menu Description"
+  },
+  "Simplified Chinese": {
+    preview: "🖼️ 图片预览",
+    upload: "选择并上传图片",
+    tryAnother: "🔁 重新上传",
+    clear: "❌ 清空",
+    loading: "正在分析菜单图片...",
+    uploadError: "上传失败，请重试。",
+    title: "🍽️ 菜单介绍"
+  }
+};
 
   const resetState = () => {
     setMenu(null);
@@ -75,7 +73,7 @@ export default function Home() {
         setMenu(data.menu);
       }
     } catch (err) {
-      setError(uiTextMap[language]?.uploadError || "Upload failed. Please try again.");
+      setError(languageTextMap[language]?.uploadError || "Upload failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -133,8 +131,8 @@ export default function Home() {
           disabled={loading}
         >
           {loading
-            ? uiTextMap[language]?.loading
-            : uiTextMap[language]?.upload || "Choose and Upload Image"}
+            ? languageTextMap[language]?.loading
+            : languageTextMap[language]?.upload || "Choose and Upload Image"}
         </button>
       )}
 
@@ -145,13 +143,13 @@ export default function Home() {
             className="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition"
             disabled={loading}
           >
-            {uiTextMap[language]?.tryAnother || "🔁 Try Another Image"}
+            {languageTextMap[language]?.tryAnother || "🔁 Try Another Image"}
           </button>
           <button
             onClick={handleClear}
             className="bg-gray-300 text-gray-800 px-5 py-2 rounded-full hover:bg-gray-400 transition"
           >
-            {uiTextMap[language]?.clear || "❌ Clear"}
+            {languageTextMap[language]?.clear || "❌ Clear"}
           </button>
         </div>
       )}
@@ -159,7 +157,7 @@ export default function Home() {
       {previewUrl && !loading && (
         <div className="mt-6">
           <h2 className="text-lg font-medium mb-2">
-            {uiTextMap[language]?.preview}
+            {languageTextMap[language]?.preview}
           </h2>
           <img
             src={previewUrl}
@@ -173,7 +171,7 @@ export default function Home() {
 
       {menu && (
         <div className="mt-6 w-full max-w-xl">
-          <h2 className="text-xl font-semibold mb-4">{titleMap[language] || "🍽️ Menu Description"}</h2>
+          <h2 className="text-xl font-semibold mb-4">{languageTextMap[language]?.title || "🍽️ Menu Description"}</h2>
           <div className="space-y-6">
             {menu.map((item, index) => (
               <div
