@@ -14,7 +14,6 @@ export default function Home() {
   ];
 
   const uiTextMap = {
-  
     English: {
       preview: "🖼️ Preview",
       upload: "Choose and Upload Image",
