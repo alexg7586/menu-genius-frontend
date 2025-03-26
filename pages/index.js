@@ -154,10 +154,10 @@ export default function Home() {
     setMenu(null);
 
     try {
-      const res = await fetch("http://localhost:5001/upload", {
+      const res = await fetch("https://menu-genius-backend.onrender.com/upload", {
         method: "POST",
         body: formData,
-      });
+      });      
       const data = await res.json();
 
       if (data.error) {
