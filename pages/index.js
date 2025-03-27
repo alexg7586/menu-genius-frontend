@@ -6,34 +6,20 @@ export default function Home() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [language, setLanguage] = useState("English");
 
-  const languageOptions = [
-    { label: "English", value: "English" },
-    { label: "简体中文", value: "Simplified Chinese" },
-  ];
+  const language = "English"; // 固定语言为英文
 
-  
-const languageTextMap = {
-  English: {
-    preview: "🖼️ Preview",
-    upload: "Choose and Upload Image",
-    tryAnother: "🔁 Try Another Image",
-    clear: "❌ Clear",
-    loading: "Analyzing menu image...",
-    uploadError: "Upload failed. Please try again.",
-    title: "🍽️ Menu Description"
-  },
-  "Simplified Chinese": {
-    preview: "🖼️ 图片预览",
-    upload: "选择并上传图片",
-    tryAnother: "🔁 重新上传",
-    clear: "❌ 清空",
-    loading: "正在分析菜单图片...",
-    uploadError: "上传失败，请重试。",
-    title: "🍽️ 菜单介绍"
-  }
-};
+  const languageTextMap = {
+    English: {
+      preview: "🖼️ Preview",
+      upload: "Choose and Upload Image",
+      tryAnother: "🔁 Try Another Image",
+      clear: "❌ Clear",
+      loading: "Analyzing menu image...",
+      uploadError: "Upload failed. Please try again.",
+      title: "🍽️ Menu Description"
+    }
+  };
 
   const resetState = () => {
     setMenu(null);
@@ -48,7 +34,7 @@ const languageTextMap = {
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("language", language);
+    formData.append("language", "English");
 
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -64,7 +50,7 @@ const languageTextMap = {
       const res = await fetch("https://menu-genius-backend.onrender.com/upload", {
         method: "POST",
         body: formData,
-      });      
+      });
       const data = await res.json();
 
       if (data.error) {
@@ -73,7 +59,7 @@ const languageTextMap = {
         setMenu(data.menu);
       }
     } catch (err) {
-      setError(languageTextMap[language]?.uploadError || "Upload failed. Please try again.");
+      setError(languageTextMap.English.uploadError);
     } finally {
       setLoading(false);
     }
@@ -95,7 +81,6 @@ const languageTextMap = {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
-      
       <div className="text-center mb-8">
         <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text">
           🍽️ MenuGenius
@@ -104,17 +89,6 @@ const languageTextMap = {
           AI-powered Menu Decoder
         </p>
       </div>
-    
-
-      <select
-        className="mb-6 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        value={language}
-        onChange={(e) => setLanguage(e.target.value)}
-      >
-        {languageOptions.map((lang) => (
-          <option key={lang.value} value={lang.value}>{lang.label}</option>
-        ))}
-      </select>
 
       <input
         type="file"
@@ -131,8 +105,8 @@ const languageTextMap = {
           disabled={loading}
         >
           {loading
-            ? languageTextMap[language]?.loading
-            : languageTextMap[language]?.upload || "Choose and Upload Image"}
+            ? languageTextMap.English.loading
+            : languageTextMap.English.upload}
         </button>
       )}
 
@@ -143,21 +117,21 @@ const languageTextMap = {
             className="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition"
             disabled={loading}
           >
-            {languageTextMap[language]?.tryAnother || "🔁 Try Another Image"}
+            {languageTextMap.English.tryAnother}
           </button>
           <button
             onClick={handleClear}
             className="bg-gray-300 text-gray-800 px-5 py-2 rounded-full hover:bg-gray-400 transition"
           >
-            {languageTextMap[language]?.clear || "❌ Clear"}
+            {languageTextMap.English.clear}
           </button>
         </div>
       )}
-      
+
       {previewUrl && !loading && (
         <div className="mt-6">
           <h2 className="text-lg font-medium mb-2">
-            {languageTextMap[language]?.preview}
+            {languageTextMap.English.preview}
           </h2>
           <img
             src={previewUrl}
@@ -171,7 +145,9 @@ const languageTextMap = {
 
       {menu && (
         <div className="mt-6 w-full max-w-xl">
-          <h2 className="text-xl font-semibold mb-4">{languageTextMap[language]?.title || "🍽️ Menu Description"}</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            {languageTextMap.English.title}
+          </h2>
           <div className="space-y-6">
             {menu.map((item, index) => (
               <div
