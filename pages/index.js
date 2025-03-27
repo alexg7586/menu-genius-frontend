@@ -1,31 +1,33 @@
 import { useRef, useState } from "react";
 
+const languageText = {
+  preview: "🖼️ Preview",
+  upload: "Choose and Upload Image",
+  tryAnother: "🔁 Try Another Image",
+  clear: "❌ Clear",
+  loading: "Analyzing menu image...",
+  uploadError: "Upload failed. Please try again.",
+  title: "🍽️ Menu Description"
+};
+
+const MenuCard = ({ item }) => (
+  <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
+    <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
+  </div>
+);
+
 export default function Home() {
   const fileInputRef = useRef(null);
-  const [menu, setMenu] = useState(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const language = "English"; // 固定语言为英文
-
-  const languageTextMap = {
-    English: {
-      preview: "🖼️ Preview",
-      upload: "Choose and Upload Image",
-      tryAnother: "🔁 Try Another Image",
-      clear: "❌ Clear",
-      loading: "Analyzing menu image...",
-      uploadError: "Upload failed. Please try again.",
-      title: "🍽️ Menu Description"
-    }
-  };
+  const [state, setState] = useState({
+    menu: null,
+    error: "",
+    loading: false,
+    previewUrl: null,
+  });
 
   const resetState = () => {
-    setMenu(null);
-    setError("");
-    setLoading(false);
-    setPreviewUrl(null);
+    setState({ menu: null, error: "", loading: false, previewUrl: null });
   };
 
   const handleFileChange = async (e) => {
@@ -38,13 +40,11 @@ export default function Home() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreviewUrl(reader.result);
+      setState(prev => ({ ...prev, previewUrl: reader.result }));
     };
     reader.readAsDataURL(file);
 
-    setLoading(true);
-    setError("");
-    setMenu(null);
+    setState(prev => ({ ...prev, loading: true, error: "", menu: null }));
 
     try {
       const res = await fetch("https://menu-genius-backend.onrender.com/upload", {
@@ -54,14 +54,16 @@ export default function Home() {
       const data = await res.json();
 
       if (data.error) {
-        setError(data.error);
+        setState(prev => ({ ...prev, error: data.error }));
+      } else if (!data.menu || !Array.isArray(data.menu)) {
+        setState(prev => ({ ...prev, error: "Invalid response format" }));
       } else {
-        setMenu(data.menu);
+        setState(prev => ({ ...prev, menu: data.menu }));
       }
     } catch (err) {
-      setError(languageTextMap.English.uploadError);
+      setState(prev => ({ ...prev, error: languageText.uploadError }));
     } finally {
-      setLoading(false);
+      setState(prev => ({ ...prev, loading: false }));
     }
   };
 
@@ -74,10 +76,10 @@ export default function Home() {
 
   const handleClear = () => {
     resetState();
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
+    if (fileInputRef.current) fileInputRef.current.value = null;
   };
+
+  const { menu, error, loading, previewUrl } = state;
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
@@ -104,9 +106,7 @@ export default function Home() {
           className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-6 py-2 rounded-full shadow hover:shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50"
           disabled={loading}
         >
-          {loading
-            ? languageTextMap.English.loading
-            : languageTextMap.English.upload}
+          {loading ? languageText.loading : languageText.upload}
         </button>
       )}
 
@@ -117,22 +117,20 @@ export default function Home() {
             className="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600 transition"
             disabled={loading}
           >
-            {languageTextMap.English.tryAnother}
+            {languageText.tryAnother}
           </button>
           <button
             onClick={handleClear}
             className="bg-gray-300 text-gray-800 px-5 py-2 rounded-full hover:bg-gray-400 transition"
           >
-            {languageTextMap.English.clear}
+            {languageText.clear}
           </button>
         </div>
       )}
 
       {previewUrl && !loading && (
         <div className="mt-6">
-          <h2 className="text-lg font-medium mb-2">
-            {languageTextMap.English.preview}
-          </h2>
+          <h2 className="text-lg font-medium mb-2">{languageText.preview}</h2>
           <img
             src={previewUrl}
             alt="Preview"
@@ -145,18 +143,10 @@ export default function Home() {
 
       {menu && (
         <div className="mt-6 w-full max-w-xl">
-          <h2 className="text-xl font-semibold mb-4">
-            {languageTextMap.English.title}
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">{languageText.title}</h2>
           <div className="space-y-6">
             {menu.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]"
-              >
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
-              </div>
+              <MenuCard key={index} item={item} />
             ))}
           </div>
         </div>
@@ -164,3 +154,4 @@ export default function Home() {
     </main>
   );
 }
+
