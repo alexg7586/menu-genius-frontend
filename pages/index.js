@@ -15,7 +15,6 @@ const languageText = {
 const MenuCard = ({ item }) => (
   <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
     <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
-    <p className="text-base font-semibold text-gray-700 mb-2">{item.price}</p>
     <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
   </div>
 );
@@ -56,7 +55,7 @@ export default function Home() {
 
     // Send request to backend API
     try {
-      const res = await fetch("http://localhost:8000/upload", {
+      const res = await fetch("https://menu-genius-backend.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
