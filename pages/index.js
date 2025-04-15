@@ -13,9 +13,19 @@ const languageText = {
 
 // Single dish card component
 const MenuCard = ({ item }) => (
-  <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+  <div className="relative bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-[1.01]">
+    {/* 菜名 */}
     <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
+
+    {/* 描述 */}
     <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
+
+    {/* 价格（右上角显示） */}
+    {item.price && (
+      <span className="absolute top-4 right-4 text-sm font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded">
+        {item.price}
+      </span>
+    )}
   </div>
 );
 
