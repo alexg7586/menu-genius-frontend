@@ -40,7 +40,6 @@ export default function Home() {
     error: "",
     loading: false,
     previewUrl: null,
-    progress: 0,
     darkMode: false,
     currentPage: 1,
     itemsPerPage: 6, // Number of items per page desired number of cards per page
@@ -48,7 +47,7 @@ export default function Home() {
 
   // Reset app state
   const resetState = () => {
-    setState({ menu: null, error: "", loading: false, previewUrl: null, progress: 0, darkMode: state.darkMode, currentPage: 1 });
+    setState({ menu: null, error: "", loading: false, previewUrl: null, darkMode: state.darkMode, currentPage: 1 });
   };
 
   // Toggle dark mode
@@ -72,18 +71,11 @@ export default function Home() {
     };
     reader.readAsDataURL(file);
 
-    setState(prev => ({ ...prev, loading: true, error: "", menu: null, progress: 0 }));
+    setState(prev => ({ ...prev, loading: true, error: "", menu: null }));
 
-    // Use XMLHttpRequest to track upload progress
+    // Use XMLHttpRequest to handle file upload
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "https://menu-genius-backend.onrender.com/upload", true);
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const progress = Math.round((event.loaded / event.total) * 100);
-        setState(prev => ({ ...prev, progress }));
-      }
-    };
 
     xhr.onload = () => {
       if (xhr.status === 200) {
@@ -140,7 +132,7 @@ export default function Home() {
     });
   };
 
-  const { menu, error, loading, previewUrl, progress, darkMode, currentPage, itemsPerPage } = state;
+  const { menu, error, loading, previewUrl, darkMode, currentPage, itemsPerPage } = state;
 
   // Calculate paginated menu items
   const paginatedMenu = menu
@@ -159,7 +151,9 @@ export default function Home() {
 
       {/* Title section */}
       <div className="text-center mb-8">
-        <img src="/2025-02-13_20.45.46.webp" alt="Logo" className="w-106 h-72 mx-auto mb-4 rounded-lg" />
+        <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text">
+          🍽️ MenuGenius
+        </h1>
         <p className="mt-2 text-gray-600 text-sm sm:text-base">
           AI-powered Menu Decoder
         </p>
@@ -194,18 +188,6 @@ export default function Home() {
               </>
             )}
           </button>
-
-          {/* Progress bar */}
-          {loading && (
-            <div className="w-full max-w-md mt-4">
-              <div className="h-2 bg-gray-200 rounded">
-                <div
-                  className="h-full bg-blue-500 rounded"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
-            </div>
-          )}
         </>
       )}
 
