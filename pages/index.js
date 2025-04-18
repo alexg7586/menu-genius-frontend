@@ -74,46 +74,45 @@ export default function Home() {
 
     setState(prev => ({ ...prev, loading: true, error: "", menu: null, progress: 0 }));
 
-    // Simulate progress
-    const interval = setInterval(() => {
-      setState(prev => {
-        if (prev.progress >= 100) {
-          clearInterval(interval);
-          return prev;
+    // Use XMLHttpRequest to track upload progress
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://menu-genius-backend.onrender.com/upload", true);
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const progress = Math.round((event.loaded / event.total) * 100);
+        setState(prev => ({ ...prev, progress }));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          if (data.error) {
+            setState(prev => ({ ...prev, error: data.error }));
+          } else if (!data.menu || !Array.isArray(data.menu)) {
+            setState(prev => ({ ...prev, error: "Invalid response format" }));
+          } else {
+            setState(prev => ({ ...prev, menu: data.menu }));
+          }
+        } catch {
+          setState(prev => ({ ...prev, error: "Invalid response from server" }));
         }
-        return { ...prev, progress: prev.progress + 10 };
-      });
-    }, 200);
-
-    // Send request to backend API
-    try {
-      const res = await fetch("https://menu-genius-backend.onrender.com/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      // Check if response is valid JSON
-      let data;
-      try {
-        data = await res.json();
-      } catch (err) {
-        setState(prev => ({ ...prev, error: "Invalid response from server" }));
-        return;
-      }
-
-      // Error or success handling
-      if (data.error) {
-        setState(prev => ({ ...prev, error: data.error }));
-      } else if (!data.menu || !Array.isArray(data.menu)) {
-        setState(prev => ({ ...prev, error: "Invalid response format" }));
       } else {
-        setState(prev => ({ ...prev, menu: data.menu }));
+        setState(prev => ({ ...prev, error: languageText.uploadError }));
       }
-    } catch (err) {
+    };
+
+    xhr.onerror = () => {
       setState(prev => ({ ...prev, error: languageText.uploadError }));
-    } finally {
+    };
+
+    xhr.onloadend = () => {
       setState(prev => ({ ...prev, loading: false }));
-    }
+    };
+
+    xhr.send(formData);
   };
 
   // Trigger file input
